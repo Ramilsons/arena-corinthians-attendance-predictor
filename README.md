@@ -44,3 +44,19 @@ arena-corinthians-attendance-predictor/
 ├── mlruns/                  # Local MLflow experiment tracking logs
 ├── requirements.txt         # Project dependencies
 └── README.md
+```
+
+---
+
+### Exploratory Data Analysis (EDA)
+
+In `notebooks/01-eda.ipynb`, we analyze the relationship and temporal evolution of the mean attendance by year at the Neo Química Arena. 
+
+A sharp drop in attendance is clearly visible during **2020 and 2021**, directly resulting from stadium access restrictions and public health protocols during the COVID-19 pandemic (spanning from the match on February 26, 2020, up to the return of fans on November 1, 2021).
+
+| Mean Attendance by Year |
+| :----------------------: |
+| ![Mean Attendance by Year Graphic](./notebooks/outputs/mean-attendance-by-year.png) |
+
+[Reference](https://www.tudotimao.com.br/noticia/159661/veja-como-a-torcida-viveu-o-corinthians-no-periodo-de-portoes-fechados)
+[Reference](https://www.meutimao.com.br/jogo/5930/brasileirao-2021/corinthians-1-x-0-chapecoense)
