@@ -1,5 +1,5 @@
 import mlflow
-from sklearn.ensemble import RandomForestRegressor
+from sklearn.ensemble import GradientBoostingRegressor
 from utils import loadProcessedData, evaluateModel
 
 def main():
@@ -8,35 +8,36 @@ def main():
     mlflow.set_tracking_uri("sqlite:///mlflow.db")
     mlflow.set_experiment("arena-corinthians-attendance-baseline")
 
-    n_estimators = 100
-    max_depth = 5
+    params = {
+        'n_estimators': 100,
+        'learning_rate': 0.1,
+        'max_depth': 3,
+        'random_state': 42
+    }
 
     print("--> TRACKING URI ATUAL:", mlflow.get_tracking_uri())
 
     with mlflow.start_run():
-        mlflow.log_param("model_type", "RandomForestRegressor")
-        mlflow.log_param("n_estimators", n_estimators)
-        mlflow.log_param("nax_depth", max_depth)
+        mlflow.log_param("model_type", "GradientBoostingRegressor")
+        mlflow.log_param("n_estimators", params["n_estimators"])
+        mlflow.log_param("learning_rate", params["learning_rate"])
+        mlflow.log_param("random_state", params["random_state"])
+        mlflow.log_param("nax_depth", params["max_depth"])
 
         # Training Model
-        model = RandomForestRegressor(
-            n_estimators = n_estimators,
-            max_depth = max_depth,
-            random_state = 42
-        )
-
+        model = GradientBoostingRegressor(**params)
         model.fit(XTrain, yTrain)
 
         predictions = model.predict(XTest)
         metrics = evaluateModel(yTest, predictions)
 
-        print("Random Forest Metrics:")
+        print("Gradient Boosting Metrics:")
         for metricName, value in metrics.items():
             print(f"{metricName.upper()}: {value:.2f}")
             mlflow.log_metric(metricName, value)
 
         # Saving model as Artifact
-        mlflow.sklearn.log_model(model, name = "random-forest-model", skops_trusted_types=["sklearn.tree._tree.Tree"])
+        mlflow.sklearn.log_model(model, name = "gradient-boosting-regressor", skops_trusted_types=["sklearn.tree._tree.Tree"])
         print("Training has been saved into MLFow")
 
 if __name__ == "__main__":

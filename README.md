@@ -145,3 +145,16 @@ We carried out important feature engineering steps to make the data more informa
 * **Opponent Team Encoding (*Target Encoding*):** We chose to apply Target Encoding to the opponent team names. One-Hot Encoding was discarded because it would cause an excessive increase in dimensionality. Additionally, Target Encoding handles cases better if the model encounters a new team in the future that was not present in the training set.
 * **Data Splitting & Leakage Prevention:** To ensure robust evaluation without data leakage, the dataset is split into training and testing sets *before* applying any feature engineering or target encoding. 
 * **Target Encoding Protection:** The target means for categorical features (such as teams and championships) are computed **exclusively** on the training partition and then mapped onto the test set, preventing any target information from the test set from leaking into the training phase.
+
+
+
+### Model Selection & Experiment Tracking
+
+We evaluated multiple regression algorithms and tracked all training iterations, parameters, and metrics using **MLflow** with a local SQLite database (`mlflow.db`). 
+
+* **Baseline Model (Random Forest):** Achieved an initial $R^2$ of ~0.75 and an MAE of ~5.08.
+* **Selected Model (Gradient Boosting):** Outperformed the baseline by capturing non-linear relationships more effectively, reaching an improved $R^2$ of **~0.76** and a lower MAE of **~4.92**. 
+
+![MLFlow Graphic Comparing 2 Runs from 1 Experiment](./src/models/metrics-compare/random-forest-vs-gradient-boosting.png)
+
+Based on these results, **Gradient Boosting** was chosen as the champion model to proceed with **Hyperparameter Tuning**.
