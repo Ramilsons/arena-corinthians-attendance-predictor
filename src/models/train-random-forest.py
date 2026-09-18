@@ -11,8 +11,6 @@ def main():
     n_estimators = 100
     max_depth = 5
 
-    print("--> TRACKING URI ATUAL:", mlflow.get_tracking_uri())
-
     with mlflow.start_run():
         mlflow.log_param("model_type", "RandomForestRegressor")
         mlflow.log_param("n_estimators", n_estimators)

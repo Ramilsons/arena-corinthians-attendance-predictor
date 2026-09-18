@@ -147,14 +147,26 @@ We carried out important feature engineering steps to make the data more informa
 * **Target Encoding Protection:** The target means for categorical features (such as teams and championships) are computed **exclusively** on the training partition and then mapped onto the test set, preventing any target information from the test set from leaking into the training phase.
 
 
+--- 
 
 ### Model Selection & Experiment Tracking
 
 We evaluated multiple regression algorithms and tracked all training iterations, parameters, and metrics using **MLflow** with a local SQLite database (`mlflow.db`). 
+After comprehensive experimentation and tracking via MLflow, **GradientBoostingRegressor (Standard parameters)** was chosen as the champion model for the production baseline. 
 
-* **Baseline Model (Random Forest):** Achieved an initial $R^2$ of ~0.75 and an MAE of ~5.08.
-* **Selected Model (Gradient Boosting):** Outperformed the baseline by capturing non-linear relationships more effectively, reaching an improved $R^2$ of **~0.76** and a lower MAE of **~4.92**. 
+* **$R^2$ Score:** ~0.76 (Highest variance explained)
+* **MAE (Mean Absolute Error):** ~4.92
+* **RMSE (Root Mean Squared Error):** ~6.18
 
-![MLFlow Graphic Comparing 2 Runs from 1 Experiment](./src/models/metrics-compare/random-forest-vs-gradient-boosting.png)
+R2
+---
+![MLFlow Graphic Comparing R2 Score](./src/models/metrics-compare/scatter-plot-r2.PNG)
+---
 
-Based on these results, **Gradient Boosting** was chosen as the champion model to proceed with **Hyperparameter Tuning**.
+MAE
+---
+![MLFlow Graphic Comparing MAE Score](./src/models/metrics-compare/scatter-plot-mae.png)
+---
+RMSE
+----
+![MLFlow Graphic Comparing RMSE Score](./src/models/metrics-compare/scatter-plot-rmse.png)

@@ -15,8 +15,6 @@ def main():
         'random_state': 42
     }
 
-    print("--> TRACKING URI ATUAL:", mlflow.get_tracking_uri())
-
     with mlflow.start_run():
         mlflow.log_param("model_type", "GradientBoostingRegressor")
         mlflow.log_param("n_estimators", params["n_estimators"])

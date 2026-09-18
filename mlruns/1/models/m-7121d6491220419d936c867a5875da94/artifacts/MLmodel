@@ -1,0 +1,25 @@
+artifact_path: "file:C:/Users/ramil/OneDrive/\xC1rea de Trabalho/Study/machine-learning/arena-corinthians-attendance-predictor/mlruns/1/models/m-7121d6491220419d936c867a5875da94/artifacts"
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.skops
+    predict_fn: predict
+    python_version: 3.14.2
+  sklearn:
+    code: null
+    pickled_model: model.skops
+    serialization_format: skops
+    sklearn_version: 1.9.1
+    skops_trusted_types:
+    - xgboost.sklearn.XGBRegressor
+    - xgboost.core.Booster
+mlflow_version: 3.16.0
+model_id: m-7121d6491220419d936c867a5875da94
+model_size_bytes: 423413
+model_uuid: m-7121d6491220419d936c867a5875da94
+prompts: null
+run_id: 53cfe13b3521406ba6c6962324ed7f5b
+utc_time_created: '2026-09-18 22:37:54.906242'
