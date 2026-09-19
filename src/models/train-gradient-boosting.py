@@ -1,4 +1,9 @@
+import os
+import pickle
+import joblib
 import mlflow
+
+from pathlib import Path
 from sklearn.ensemble import GradientBoostingRegressor
 from utils import loadProcessedData, evaluateModel
 
@@ -37,6 +42,13 @@ def main():
         # Saving model as Artifact
         mlflow.sklearn.log_model(model, name = "gradient-boosting-regressor", skops_trusted_types=["sklearn.tree._tree.Tree"])
         print("Training has been saved into MLFow")
+
+        rootDir = Path(__file__).resolve().parent.parent.parent
+        artifactsPath = rootDir / "artifacts" / "model.pkl"
+
+        os.makedirs('artifacts', exist_ok = True)
+        joblib.dump(model, artifactsPath)
+        print("Model as PKL has been saved into Artifacts folder")
 
 if __name__ == "__main__":
     main()

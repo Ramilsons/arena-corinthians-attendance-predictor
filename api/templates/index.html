@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white font-sans flex items-center justify-center min-h-screen py-10">
+    <div class="bg-gray-800 p-8 rounded-xl shadow-2xl w-full max-w-lg border border-gray-700">
+        <h1 class="text-2xl font-bold mb-6 text-center text-red-500">⚽ {{ message }}</h1>
+        
+        <form action="/predict" method="POST" class="space-y-4">
+            <div class="grid grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-xs font-medium mb-1">Dia</label>
+                    <input type="number" name="day" value="20" required class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-1 text-white">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium mb-1">Mês</label>
+                    <input type="number" name="month" value="9" required class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-1 text-white">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium mb-1">Ano</label>
+                    <input type="number" name="year" value="2026" required class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-1 text-white">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-medium mb-1">Hora (Ex: 16)</label>
+                    <input type="number" name="hour_num" value="16" required class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-1 text-white">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium mb-1">Dia da Semana (Ex: SÁB)</label>
+                    <input type="text" name="day_of_week" value="DOM" required class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-1 text-white uppercase">
+                </div>
+            </div>
+
+            <div class="">
+                <div>
+                    <label class="block text-xs font-medium mb-1">Mandante</label>
+                    <input type="" name="corinthians" value="CORINTHIANS" disabled  class="w-full opacity-50 bg-gray-700 border border-gray-600 rounded px-2 py-1 text-white uppercase">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-medium mb-1">Visitante (Ex: FLUMINENSE)</label>
+                    <input type="text" name="visitant" value="FLUMINENSE" required class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-1 text-white uppercase">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium mb-1">UF do Visitante (Ex: RJ)</label>
+                    <input type="text" name="visit_state" value="RJ" required class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-1 text-white uppercase">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium mb-1">Campeonato</label>
+                    <input type="text" name="league" value="CAMPEONATO BRASILEIRO" required class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-1 text-white uppercase">
+                </div>
+            </div>
+
+            <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-200 mt-4">
+                Calcular Público Estimado
+            </button>
+        </form>
+
+        {% if prediction is defined %}
+        <div class="mt-6 p-4 bg-gray-700 rounded-lg text-center border border-green-500">
+            <h2 class="text-sm text-gray-300">Público Estimado:</h2>
+            <p class="text-3xl font-extrabold text-green-400 mt-1">{{ prediction }} Pessoas</p>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

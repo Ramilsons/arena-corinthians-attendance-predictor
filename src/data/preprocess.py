@@ -102,9 +102,6 @@ def applyTargetEncoding(trainDf, testDf, targetCols, targetColName = 'PUBLICO PA
             trainDf[f'{col}_ENCODED'] = trainDf[col].map(encodingMap).fillna(globalMean)
             testDf[f'{col}_ENCODED'] = testDf[col].map(encodingMap).fillna(globalMean)
 
-            trainDf = trainDf.drop(columns = [col])
-            testDf = testDf.drop(columns = [col])
-
     return trainDf, testDf
 
 
