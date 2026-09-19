@@ -3,75 +3,190 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ title }}</title>
+    <title>Neo Química Arena Intelligence | Predição de Público</title>
+    <meta name="description" content="Ferramenta de inteligência analítica para estimativa em tempo real de público pagante na Neo Química Arena.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚽</text></svg>">
     <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-900 text-white font-sans flex items-center justify-center min-h-screen py-10">
-    <div class="bg-gray-800 p-8 rounded-xl shadow-2xl w-full max-w-lg border border-gray-700">
-        <h1 class="text-2xl font-bold mb-6 text-center text-red-500">⚽ {{ message }}</h1>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
         
-        <form action="/predict" method="POST" class="space-y-4">
-            <div class="grid grid-cols-3 gap-4">
-                <div>
-                    <label class="block text-xs font-medium mb-1">Dia</label>
-                    <input type="number" name="day" value="20" required class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-1 text-white">
+        :root {
+            --bg-main: #f5f5f7;
+            --text-main: #1d1d1f;
+            --text-muted: #86868b;
+            --border-color: #d2d2d7;
+            --border-light: #e5e5ea;
+            --accent-blue: #0071e3;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        .input-base {
+            width: 100%;
+            background-color: var(--bg-main);
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
+            padding: 0.625rem 0.75rem;
+            color: var(--text-main);
+            font-size: 0.875rem;
+            transition: border-color 0.2s ease;
+        }
+
+        .input-base:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+        }
+
+        .input-disabled {
+            width: 100%;
+            background-color: color-mix(in srgb, var(--bg-main) 60%, transparent);
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
+            padding: 0.625rem 0.75rem;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            cursor: not-allowed;
+        }
+
+        .label-base {
+            display: block;
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--text-muted);
+            margin-bottom: 0.375rem;
+        }
+    </style>
+</head>
+<body class="bg-[var(--bg-main)] text-[var(--text-main)] antialiased flex items-center justify-center min-h-screen p-4 md:p-8">
+    <div class="bg-white rounded-3xl shadow-xl w-full max-w-5xl border border-[var(--border-color)] grid grid-cols-1 lg:grid-cols-2 overflow-hidden">
+        
+        <div class="p-8 md:p-12 flex flex-col justify-between">
+            <div>
+                <div class="mb-8">
+                    <h1 class="text-2xl md:text-3xl font-semibold tracking-tight mt-1 text-[var(--text-main)]">{{ message }}</h1>
+                    <p class="text-sm text-[var(--text-muted)] mt-1.5 font-normal">Insira os parâmetros da partida para gerar a estimativa de público pagante em tempo real.</p>
                 </div>
-                <div>
-                    <label class="block text-xs font-medium mb-1">Mês</label>
-                    <input type="number" name="month" value="9" required class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-1 text-white">
-                </div>
-                <div>
-                    <label class="block text-xs font-medium mb-1">Ano</label>
-                    <input type="number" name="year" value="2026" required class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-1 text-white">
-                </div>
+                {% if prediction is defined %}
+                    <a href="/" class="cursor-pointer w-full bg-black hover:bg-black/80 text-white font-medium py-3 px-4 rounded-xl transition-all duration-200 mt-3 text-sm shadow-sm">Realizar Novo Preenchimento</a>
+                {% endif %}
+
+                
+                {% if prediction is not defined %}
+                <form action="/predict" method="POST" class="space-y-4">
+                    <div>
+                        <label class="label-base">Mandante</label>
+                        <input type="text" name="corinthians" value="CORINTHIANS" disabled class="input-disabled uppercase">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="label-base">Visitante</label>
+                            <select name="visitant" required class="input-base uppercase">
+                                <option value="FLAMENGO">Flamengo</option>
+                                <option value="PALMEIRAS">Palmeiras</option>
+                                <option value="ATHLETICO-PR">Athletico-PR</option>
+                                <option value="BAHIA">Bahia</option>
+                                <option value="FLUMINENSE" selected>Fluminense</option>
+                                <option value="CRUZEIRO">Cruzeiro</option>
+                                <option value="ATLÉTICO-MG">Atlético-MG</option>
+                                <option value="CORITIBA">Coritiba</option>
+                                <option value="BRAGANTINO">Bragantino</option>
+                                <option value="SANTOS">Santos</option>
+                                <option value="BOTAFOGO">Botafogo</option>
+                                <option value="SÃO PAULO">São Paulo</option>
+                                <option value="VITÓRIA">Vitória</option>
+                                <option value="MIRASSOL">Mirassol</option>
+                                <option value="GRÊMIO">Grêmio</option>
+                                <option value="VASCO">Vasco</option>
+                                <option value="INTERNACIONAL">Internacional</option>
+                                <option value="REMO">Remo</option>
+                                <option value="CHAPECOENSE">Chapecoense</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="label-base">UF do Visitante</label>
+                            <select name="visit_state" required class="input-base uppercase">
+                                <option value="RJ" selected>RJ (Rio de Janeiro)</option>
+                                <option value="SP">SP (São Paulo)</option>
+                                <option value="PR">PR (Paraná)</option>
+                                <option value="BA">BA (Bahia)</option>
+                                <option value="MG">MG (Minas Gerais)</option>
+                                <option value="RS">RS (Rio Grande do Sul)</option>
+                                <option value="PA">PA (Pará)</option>
+                                <option value="SC">SC (Santa Catarina)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-3">
+                        <div>
+                            <label class="label-base">Dia</label>
+                            <input type="number" name="day" value="20" required class="input-base">
+                        </div>
+                        <div>
+                            <label class="label-base">Mês</label>
+                            <input type="number" name="month" value="9" required class="input-base">
+                        </div>
+                        <div>
+                            <label class="label-base">Ano</label>
+                            <input type="number" name="year" value="2026" required class="input-base">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="label-base">Hora (Ex: 16 para 16h)</label>
+                            <input type="number" name="hour_num" value="16" required class="input-base">
+                        </div>
+
+                        <div>
+                            <label class="label-base">Dia da Semana</label>
+                            <select name="day_of_week" required class="input-base uppercase">
+                                <option value="DOM" selected>Domingo</option>
+                                <option value="SÁB">Sábado</option>
+                                <option value="QUA">Quarta-feira</option>
+                                <option value="QUI">Quinta-feira</option>
+                                <option value="SEG">Segunda-feira</option>
+                                <option value="TER">Terça-feira</option>
+                                <option value="SEX">Sexta-feira</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="label-base">Liga</label>
+                        <input type="text" name="league" value="CAMPEONATO BRASILEIRO" disabled class="input-disabled uppercase">
+                    </div>
+
+                    <button type="submit" class="w-full bg-black hover:bg-black/80 text-white font-medium py-3 px-4 rounded-xl transition-all duration-200 mt-3 text-sm shadow-sm">
+                        Calcular Estimativa
+                    </button>
+                </form>
+                {% endif %}
             </div>
 
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-xs font-medium mb-1">Hora (Ex: 16)</label>
-                    <input type="number" name="hour_num" value="16" required class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-1 text-white">
-                </div>
-                <div>
-                    <label class="block text-xs font-medium mb-1">Dia da Semana (Ex: SÁB)</label>
-                    <input type="text" name="day_of_week" value="DOM" required class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-1 text-white uppercase">
-                </div>
+            <div class="mt-8 text-[11px] text-[var(--text-muted)] border-t border-[var(--border-light)] pt-4 flex justify-between items-center">
+                <span>Neo Química Arena Intelligence</span>
+                <span>Created By <a class="underline" target="_blank" href="https://github.com/Ramilsons" title="GitHub Profile">Ramilson</a></span>
             </div>
-
-            <div class="">
-                <div>
-                    <label class="block text-xs font-medium mb-1">Mandante</label>
-                    <input type="" name="corinthians" value="CORINTHIANS" disabled  class="w-full opacity-50 bg-gray-700 border border-gray-600 rounded px-2 py-1 text-white uppercase">
-                </div>
-            </div>
-
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-xs font-medium mb-1">Visitante (Ex: FLUMINENSE)</label>
-                    <input type="text" name="visitant" value="FLUMINENSE" required class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-1 text-white uppercase">
-                </div>
-
-                <div>
-                    <label class="block text-xs font-medium mb-1">UF do Visitante (Ex: RJ)</label>
-                    <input type="text" name="visit_state" value="RJ" required class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-1 text-white uppercase">
-                </div>
-
-                <div>
-                    <label class="block text-xs font-medium mb-1">Campeonato</label>
-                    <input type="text" name="league" value="CAMPEONATO BRASILEIRO" required class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-1 text-white uppercase">
-                </div>
-            </div>
-
-            <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-200 mt-4">
-                Calcular Público Estimado
-            </button>
-        </form>
-
-        {% if prediction is defined %}
-        <div class="mt-6 p-4 bg-gray-700 rounded-lg text-center border border-green-500">
-            <h2 class="text-sm text-gray-300">Público Estimado:</h2>
-            <p class="text-3xl font-extrabold text-green-400 mt-1">{{ prediction }} Pessoas</p>
         </div>
-        {% endif %}
+
+        <div class="relative hidden lg:block min-h-[550px] bg-[var(--bg-main)]">
+            <img src="https://admin.itatiaia.com.br/wp-content/uploads/sites/27/2026/02/whatsapp-image-2025-08-22-at-10-25-40.jpeg?resize=1200%2C1200&w=1200&h=1200&quality=75&crop=1" 
+                 alt="Neo Química Arena" 
+                 class="absolute inset-0 w-full h-full object-cover">
+            
+            {% if prediction is defined %}
+            <div class="absolute bottom-1/2 w-[300px] mx-auto text-center left-8 right-8 backdrop-blur-xl p-5 rounded-2xl border border-white/40 shadow-lg bg-black/40">
+                <span class="text-[10px] uppercase tracking-widest font-semibold text-white">Público Previsto</span>
+                <p class="text-xl font-medium text-white mt-0.5">{{ prediction }}</p>
+            </div>
+            {% endif %}
+        </div>
+
     </div>
 </body>
 </html>

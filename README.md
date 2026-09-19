@@ -1,6 +1,9 @@
 # Arena Corinthians Match Attendance Predictor 🏟️⚽
 Machine learning model and data pipeline for forecasting football match attendance at Corinthians' Neo Química Arena.
 
+
+![FrontEnd Result](./api/templates/image/frontend-result.PNG)
+
 ## 🎯 Business Objective
 Accurately predicting match attendance enables stadium management and operations to:
 * **Optimize Services:** Ensure appropriate staffing for food, beverage, and ticketing operations.
@@ -12,7 +15,6 @@ Accurately predicting match attendance enables stadium management and operations
 ## 📊 Dataset & Credits
 * **Source:** [Kaggle - Arena Corinthians Dataset](https://www.kaggle.com/datasets/danilosoares/arena-corinthians)
 * **Creator:** Originally compiled and curated by **Timão Dados @TimaoDados** (Twitter/X profile).
-* **Data Version Control (DVC):** Raw and processed datasets are version-controlled using DVC to ensure reproducibility.
 
 ---
 
@@ -87,6 +89,15 @@ To inspect the performance metrics (such as $R^2$ and MAE) and the generated art
 ```bash
 mlflow ui --backend-store-uri sqlite:///mlflow.db
 ```
+
+### 7. Run API
+```bash
+uvicorn api.main:app --reload
+```
+And access 
+```bash
+http://127.0.0.1:8000
+```
 ---
 
 ## 🏗️ Project Architecture
@@ -103,7 +114,9 @@ arena-corinthians-attendance-predictor/
 │   ├── preprocessing.py
 │   ├── train.py
 │   └── main.py
-│
+├── api/                     # Build Routes and FrontEnd
+│   ├── templates            # HTML Code
+|   └── main.py
 ├── artifacts/               # Saved model binaries (.pkl) and encoders
 ├── mlruns/                  # Local MLflow experiment tracking logs
 ├── requirements.txt         # Project dependencies
@@ -145,7 +158,7 @@ We carried out important feature engineering steps to make the data more informa
 * **Opponent Team Encoding (*Target Encoding*):** We chose to apply Target Encoding to the opponent team names. One-Hot Encoding was discarded because it would cause an excessive increase in dimensionality. Additionally, Target Encoding handles cases better if the model encounters a new team in the future that was not present in the training set.
 * **Data Splitting & Leakage Prevention:** To ensure robust evaluation without data leakage, the dataset is split into training and testing sets *before* applying any feature engineering or target encoding. 
 * **Target Encoding Protection:** The target means for categorical features (such as teams and championships) are computed **exclusively** on the training partition and then mapped onto the test set, preventing any target information from the test set from leaking into the training phase.
-
+* **One-Hot Encoding:** We applied One-Hot Encoding to the following categorical features: UF (away team state), PAIS (away team country) and DIA-SEMANA (day of the week the match took place).These features have a strictly defined, finite set of possible values with no risk of future growth or unseen categories over time. This contrasts with the features where we utilized Target Encoding.
 
 --- 
 

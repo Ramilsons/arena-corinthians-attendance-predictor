@@ -26,8 +26,14 @@ def loadModel():
     
     return model
 
+def loadDataProcessed():
+    rootDir = Path(__file__).resolve().parent.parent
+    dataProcessedPath = rootDir / "data" / "processed" /"test.csv"
 
-def executeModel(request, model, dayForm, monthForm, yearForm, dayOfWeekForm, hourForm, visitantNameForm, visitantStateForm, leagueForm):
+    df = pd.read_csv(dataProcessedPath)
+    return df
+
+def executeModel(request, model, dayForm, monthForm, yearForm, dayOfWeekForm, hourForm, visitantNameForm, visitantStateForm):
     if model is None:
         raise HTTPException(status_code=500, detail="Model not found.")
 
@@ -42,8 +48,15 @@ def executeModel(request, model, dayForm, monthForm, yearForm, dayOfWeekForm, ho
             if "HORA_NUM" in inputDf.columns: inputDf["HORA_NUM"] = hourForm
 
             if "IS_PANDEMIC_PERIOD" in inputDf.columns: inputDf["IS_PANDEMIC_PERIOD"] = 0
-            if "VISITANTE_ENCODED" in inputDf.columns: inputDf["VISITANTE_ENCODED"] = 30.056615384615384
-            if "CIDADE - VISITANTE_ENCODED" in inputDf.columns: inputDf["CIDADE - VISITANTE_ENCODED"] = 33.10517073170732
+
+            dataProcessedReference = loadDataProcessed()
+            targetEncodingColumns = ["VISITANTE_ENCODED", "CIDADE - VISITANTE_ENCODED"]
+
+            result = (dataProcessedReference.loc[dataProcessedReference["VISITANTE"] == visitantNameForm.upper(), targetEncodingColumns].head(1))
+
+            if "VISITANTE_ENCODED" in inputDf.columns: inputDf["VISITANTE_ENCODED"] = result["VISITANTE_ENCODED"].item()
+            if "CIDADE - VISITANTE_ENCODED" in inputDf.columns: inputDf["CIDADE - VISITANTE_ENCODED"] = result["CIDADE - VISITANTE_ENCODED"].item()
+            
             if "CAMPEONATO_ENCODED" in inputDf.columns: inputDf["CAMPEONATO_ENCODED"] = 30.27025287356322
             if "PAIS_BRA" in inputDf.columns: inputDf["PAIS_BRA"] = 1
 
@@ -82,7 +95,6 @@ def executeModel(request, model, dayForm, monthForm, yearForm, dayOfWeekForm, ho
                 request=request,
                 name="index.html",
                 context={
-                    "title": "Arena Corinthians Predictor",
                     "message": "Previsão de Público Neo Química Arena",
                     "prediction": f"{float(prediction):.3f}"
                 }
@@ -96,7 +108,7 @@ async def read_item(request: Request):
     return templates.TemplateResponse(
         request=request,
         name="index.html", 
-        context={"title": "Home Page", "message": "Previsão de Público Neo Química Arena"}
+        context={"message": "Previsão de Público Neo Química Arena"}
     )
 
 @app.get("/health")
@@ -116,10 +128,9 @@ async def predict(
     hour_num: int = Form(...),
     visitant: str = Form(...),
     visit_state: str = Form(0),
-    league: str = Form(...)
 ):
     modelLoaded = loadModel()
-    return executeModel(request, modelLoaded, day, month, year, day_of_week, hour_num, visitant, visit_state, league)
+    return executeModel(request, modelLoaded, day, month, year, day_of_week, hour_num, visitant, visit_state)
 
 
 if __name__ == "__main__":
