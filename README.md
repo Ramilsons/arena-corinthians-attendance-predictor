@@ -99,6 +99,31 @@ And access
 http://127.0.0.1:8000
 ```
 ---
+## How to Run the Project USING DOCKER
+
+### 1. Build the image
+```bash
+docker build -t arena-intelligence .
+```
+
+### 2. Execute Container
+```bash
+docker run -d -p 8000:8000 --name arena-app arena-intelligence
+```
+
+### 3. Access the FrontEnd
+Open your browser and access it:
+```bash
+http://localhost:8000
+```
+
+### 4. Stopping Container
+When necessary
+```bash
+docker stop arena-app
+docker rm arena-app
+```
+---
 
 ## 🏗️ Project Architecture
 ```text
