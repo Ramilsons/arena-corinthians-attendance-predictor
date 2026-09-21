@@ -1,5 +1,4 @@
 import os
-import pickle
 import joblib
 import mlflow
 
