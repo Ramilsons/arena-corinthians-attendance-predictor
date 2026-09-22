@@ -136,9 +136,8 @@ arena-corinthians-attendance-predictor/
 ├── notebooks/               # Exploratory Data Analysis (EDA)
 │
 ├── src/                     # Modularized production source code
-│   ├── preprocessing.py
-│   ├── train.py
-│   └── main.py
+│   ├── data/
+│   └── models/
 ├── api/                     # Build Routes and FrontEnd
 │   ├── templates            # HTML Code
 |   └── main.py
@@ -208,3 +207,13 @@ MAE
 RMSE
 ----
 ![MLFlow Graphic Comparing RMSE Score](./src/models/metrics-compare/scatter-plot-rmse.png)
+
+
+
+--- 
+
+### Next Steps
+
+* Streamline form completion with automatic field auto-fill (e.g., the user selects the team, and the system automatically fills in the team's state/UF).
+* Incorporate the 2026 season data once it is made available by the dataset creator.
+
